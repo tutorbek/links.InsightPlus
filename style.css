@@ -1,0 +1,1033 @@
+/* ==========================================================
+   InsightPlus O'quv Markazi — Minimalist & Mobile-Optimized
+   Clean, monoxrom va to'liq mobil moslashuvchan dizayn
+   ========================================================== */
+
+/* 1. Reset va Global Qoidalar: Mobil ko'k to'rtburchakni to'liq yo'qotish */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* Yagona minimalist fon va majburiy light theme */
+:root, html, body, select, option {
+  color-scheme: light !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  color: #18181b;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Sahifa tanasi: card ajratilmagan, butun sahifa bilan yagona #FFFFFF fon */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  max-width: 460px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 16px 56px 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(120px, calc(env(safe-area-inset-bottom) + 104px)) !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #18181b;
+  line-height: 1.5;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Matn tanlanganda ko'k rang o'rniga zamonaviy monoxrom */
+::selection {
+  background-color: #18181b;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #18181b;
+  color: #ffffff;
+}
+
+/* Barcha interaktiv elementlar uchun mobil qoidalar */
+a, button, input, select, textarea, label {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  outline: none !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+
+a, button, .choice-label, .custom-select-trigger, .custom-option {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Havolalar holati */
+a, a:visited, a:hover, a:active, a:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Klaviatura orqali navigatsiya (Accessibility) */
+button:focus-visible, a:focus-visible {
+  outline: 2px solid #18181b !important;
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   2. Header: Logotip, nom, tavsif va sahifa almashish tugmalari
+   ========================================================== */
+header {
+  text-align: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+img.logo {
+  display: block;
+  margin: 0 auto 12px auto;
+  width: 145px;
+  max-width: 170px;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+p.brand-bio {
+  text-align: center;
+  font-size: 13.5px;
+  color: #71717a;
+  margin: 0 auto;
+  max-width: 360px;
+  line-height: 1.45;
+}
+
+/* Headerdagi sahifa almashtirish tugmalari guruhi */
+p.tab-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr 44px;
+  gap: 8px;
+  width: 100%;
+  margin: 20px 0 0 0;
+  padding: 0;
+}
+
+button.tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  color: #71717a;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  box-sizing: border-box;
+}
+
+button.tab-btn:hover {
+  color: #09090b;
+  background-color: #f4f4f5;
+  border-color: #d4d4d8;
+}
+
+button.tab-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+button.tab-btn.active {
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+}
+
+/* 44px x 44px kvadrat ulashish (Share) tugmasi */
+button.tab-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  background-color: #ffffff;
+  color: #18181b;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+button.tab-btn-icon:hover {
+  background-color: #f4f4f5;
+  border-color: #d4d4d8;
+}
+
+button.tab-btn-icon:active {
+  transform: scale(0.94);
+  background-color: #e4e4e7;
+}
+
+img.tab-icon-img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* Bo'luvchi yupqa minimalist chiziq */
+hr {
+  border: none;
+  border-top: 1px solid #f4f4f5;
+  margin: 22px 0;
+  width: 100%;
+}
+
+/* ==========================================================
+   3. Bo'limlar va Ichki Sahifalar (Tab Pages)
+   ========================================================== */
+section.tab-page {
+  display: none;
+  width: 100%;
+  animation: fadeInPage 0.2s ease-in-out;
+}
+
+section.tab-page.active {
+  display: block;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2.section-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #09090b;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+p.section-desc {
+  text-align: center;
+  font-size: 13px;
+  color: #71717a;
+  margin-bottom: 20px;
+  line-height: 1.45;
+}
+
+/* ==========================================================
+   4. Minimalist Havolalar (Kurslar va Ijtimoiy tarmoqlar)
+   ========================================================== */
+a.btn-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 50px;
+  padding: 13px 20px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  color: #18181b;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  box-sizing: border-box;
+}
+
+a.btn-link:hover {
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+}
+
+a.btn-link:active {
+  transform: scale(0.985);
+  opacity: 0.9;
+}
+
+/* Ijtimoiy tarmoqlar va Kurslar: ikonkalar va yozuvlar chap tomonda bir chiziqda */
+a.social-link,
+a.course-link {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 13px 18px;
+  gap: 14px;
+}
+
+a.btn-link img.btn-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: filter 0.18s ease;
+}
+
+a.btn-link:hover img.btn-icon,
+a.btn-link:active img.btn-icon {
+  filter: invert(1);
+}
+
+/* Google Xarita (Oddiy Embed Xarita) */
+iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 280px;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 12px;
+  margin-top: 14px;
+  box-sizing: border-box;
+}
+
+p.map-location-desc {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #71717a;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   5. Minimalist Ro'yxatdan O'tish Formasi
+   ========================================================== */
+form#arizaForm {
+  margin-top: 8px;
+  width: 100%;
+}
+
+form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #27272a;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+/* Kiritish maydonlari: mobilda avto-zoom'ni oldini olish uchun font-size: 16px */
+form input[type="text"],
+form input[type="tel"],
+form input[type="date"],
+form input[type="number"],
+form select,
+form textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #e4e4e7;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #09090b;
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+form input[type="number"]::-webkit-outer-spin-button,
+form input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+form input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+form input[type="text"]:focus,
+form input[type="tel"]:focus,
+form input[type="date"]:focus,
+form input[type="number"]:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #18181b;
+  box-shadow: 0 0 0 1px #18181b;
+}
+
+/* Haqiqiy select'ni yashirish (FormData va Telegram uchun saqlanadi) */
+select.visually-hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+/* Loyiha dizaynidagi maxsus dropdown boshqaruv tugmasi */
+button.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background-color: #ffffff;
+  color: #71717a;
+  border: 1px solid #e4e4e7;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+}
+
+button.custom-select-trigger.has-value {
+  color: #09090b;
+}
+
+button.custom-select-trigger:focus,
+button.custom-select-trigger.active {
+  border-color: #18181b;
+  box-shadow: 0 0 0 1px #18181b;
+  outline: none;
+}
+
+button.custom-select-trigger::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid #71717a;
+  border-bottom: 1.5px solid #71717a;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+button.custom-select-trigger.active::after {
+  transform: rotate(-135deg);
+}
+
+/* Loyiha dizaynidagi ochiluvchi pop oyna (Dropdown Menu) */
+p.custom-select-menu {
+  display: none;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 6px;
+  animation: dropdownFade 0.18s ease-in-out;
+  max-height: 280px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+p.custom-select-menu.open {
+  display: block;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menyudagi har bir kurs varianti */
+button.custom-option {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  background: transparent;
+  color: #18181b;
+  border: none;
+  border-radius: 6px;
+  font-size: 14.5px;
+  font-family: inherit;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
+}
+
+button.custom-option:hover {
+  background-color: #f4f4f5;
+  color: #09090b;
+}
+
+button.custom-option.selected {
+  background-color: #18181b;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+p.field-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #27272a;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+/* Radio va Checkbox tanlovlari guruhi */
+p.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+}
+
+label.choice-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 calc(33.333% - 8px);
+  min-width: 85px;
+  min-height: 42px;
+  padding: 8px 12px;
+  margin: 0;
+  background-color: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #27272a;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+label.choice-label:hover {
+  background-color: #e4e4e7;
+}
+
+label.choice-label:active {
+  transform: scale(0.97);
+}
+
+/* Tanlangan holat (Modern CSS :has va JS fallback) */
+label.choice-label:has(input:checked),
+label.choice-label.selected {
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+}
+
+label.choice-label input {
+  margin-right: 7px;
+  width: 15px;
+  height: 15px;
+  accent-color: #18181b;
+  flex-shrink: 0;
+}
+
+label.choice-label:has(input:checked) input,
+label.choice-label.selected input {
+  accent-color: #ffffff;
+}
+
+/* Vaqt tanlovlari uchun maxsus 2x2 grid uslubi */
+p.choice-group-time {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+label.choice-label-time {
+  flex: none;
+  width: 100%;
+  min-height: 52px;
+  justify-content: flex-start;
+  padding: 8px 10px;
+}
+
+strong.choice-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: inherit;
+}
+
+strong.choice-text small {
+  font-size: 11px;
+  font-weight: 400;
+  color: #71717a;
+  margin-top: 2px;
+  transition: color 0.18s ease;
+}
+
+label.choice-label:has(input:checked) strong.choice-text small,
+label.choice-label.selected strong.choice-text small {
+  color: #d4d4d8;
+}
+
+@media (max-width: 360px) {
+  p.choice-group-time {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Rozilik checkboxi */
+label.consent-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #3f3f46;
+  margin: 20px 0 16px 0;
+  cursor: pointer;
+  font-weight: 400;
+  box-sizing: border-box;
+}
+
+label.consent-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: #18181b;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Yuborish tugmasi */
+button#submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 13px 20px;
+  background-color: #18181b;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.18s ease, transform 0.15s ease;
+  margin-top: 14px;
+  box-sizing: border-box;
+}
+
+button#submitBtn:hover {
+  opacity: 0.92;
+}
+
+button#submitBtn:active {
+  transform: scale(0.985);
+  opacity: 0.85;
+}
+
+button#submitBtn:disabled {
+  background-color: #a1a1aa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Holat xabari */
+p.status-message {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  display: none;
+  box-sizing: border-box;
+}
+
+p.status-success {
+  display: block;
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+p.status-error {
+  display: block;
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Pastki qism */
+p.footer-text {
+  text-align: center;
+  font-size: 12px;
+  color: #a1a1aa;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+p.footer-text a.creator-link {
+  color: #71717a;
+  text-decoration: underline;
+  text-decoration-color: #d4d4d8;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.18s ease, text-decoration-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+p.footer-text a.creator-link:hover {
+  color: #18181b;
+  text-decoration-color: #18181b;
+}
+
+/* ==========================================================
+   6. Qo'shimcha Kichik Ekranlar uchun Moslashuv (<= 360px)
+   ========================================================== */
+@media (max-width: 360px) {
+  body {
+    padding-top: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: max(120px, calc(env(safe-area-inset-bottom) + 104px)) !important;
+  }
+
+  button.tab-btn {
+    font-size: 12.5px;
+    padding: 9px 8px;
+  }
+
+  label.choice-label {
+    font-size: 12.5px;
+    padding: 7px 8px;
+  }
+}
+
+/* ==========================================================
+   7. Suzib Yuruvchi Tezkor Harakat Paneli (Mobile Floating Dock)
+   Suratdagidek qulay, ko'zni qamashtiruvchi zamonaviy pill-dock
+   ========================================================== */
+p.floating-dock {
+  position: fixed;
+  bottom: 18px;
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 420px;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(228, 228, 231, 0.85);
+  border-radius: 40px;
+  padding: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;
+  box-sizing: border-box;
+  animation: floatDockSlideUp 0.3s ease-out;
+}
+
+@keyframes floatDockSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+a.float-btn {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  outline: none !important;
+}
+
+a.float-btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* 1. Qo'ng'iroq qilish: Loyiha dizaynidagi oq minimalist tugma */
+a.float-call {
+  background-color: #ffffff;
+  color: #18181b !important;
+  border: 1px solid #e4e4e7;
+  gap: 7px;
+}
+
+a.float-call:hover {
+  background-color: #f4f4f5;
+  border-color: #d4d4d8;
+  color: #09090b !important;
+}
+
+img.float-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* 2. Ro'yxatdan o'tish: Loyiha dizaynidagi asosiy qora tugma */
+a.float-register {
+  background-color: #18181b;
+  color: #ffffff !important;
+  border: 1px solid #18181b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+a.float-register:hover {
+  background-color: #09090b;
+  border-color: #09090b;
+  color: #ffffff !important;
+}
+
+@media (max-width: 360px) {
+  p.floating-dock {
+    width: calc(100% - 20px);
+    bottom: 12px;
+    padding: 5px;
+    gap: 6px;
+  }
+
+  a.float-btn {
+    min-height: 44px;
+    font-size: 12.5px;
+    padding: 10px 8px;
+  }
+}
+
+/* ==========================================================
+   10. Maxsus Ulashish (Share) Modali (Bottom Sheet Fallback)
+   ========================================================== */
+aside.share-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+aside.share-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+button.share-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+section.share-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 20px 20px max(28px, calc(env(safe-area-inset-bottom) + 20px)) 20px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.16);
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+aside.share-modal.open section.share-sheet {
+  transform: translateY(0);
+}
+
+p.share-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f4f4f5;
+}
+
+strong.share-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #18181b;
+}
+
+button.share-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: #71717a;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+button.share-close:hover {
+  color: #18181b;
+  background-color: #f4f4f5;
+}
+
+p.share-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.share-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  color: #18181b;
+  text-decoration: none;
+  font-size: 14.5px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.share-action-btn:hover {
+  background-color: #f4f4f5;
+  border-color: #18181b;
+}
+
+.share-action-btn:active {
+  transform: scale(0.98);
+}
+
+.share-action-btn img.btn-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+  transition: filter 0.18s ease;
+}
+
+.share-action-btn:hover img.btn-icon {
+  filter: invert(1);
+}
+
+.share-action-btn:hover {
+  background-color: #18181b;
+  color: #ffffff;
+}
+
+.share-action-btn.copied {
+  background-color: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+}
+
+.share-action-btn.copied img.btn-icon {
+  filter: invert(1);
+}

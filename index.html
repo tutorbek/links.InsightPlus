@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>InsightPlus o'quv markazi | Linktree</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+
+  <!-- Header qismi: Logotip, nom, tavsif va sahifalarni almashtiruvchi buttonlar -->
+  <header>
+    <img src="logo.png" alt="InsightPlus o'quv markazi logotipi" class="logo">
+    <p class="brand-bio">Aloqa va Ijtimoiy tarmoqlar</p>
+
+    <!-- Header qismidagi buttonlar (Ichki sahifalarni almashtirish va Share) -->
+    <p class="tab-nav">
+      <button type="button" class="tab-btn active" data-tab="tarmoqlar-page">Ijtimoiy tarmoqlar</button>
+      <button type="button" class="tab-btn" data-tab="kurslar-page">Kurslar</button>
+      <button type="button" id="shareBtn" class="tab-btn-icon" aria-label="Sahifani ulashish" title="Ulashish">
+        <img src="icons/share.svg" class="tab-icon-img" alt="">
+      </button>
+    </p>
+  </header>
+
+  <hr>
+
+  <!-- 1-Ichki Sahifa: Ijtimoiy tarmoqlar va Aloqa (Birinchi bo'lib ochiladi) -->
+  <section id="tarmoqlar-page" class="tab-page active">
+    <a href="https://www.instagram.com/insightplus_lc/" target="_blank" class="btn-link social-link"><img src="icons/instagram.svg" class="btn-icon" alt="">Instagram</a>
+    <a href="https://t.me/insightlc" target="_blank" class="btn-link social-link"><img src="icons/telegram.svg" class="btn-icon" alt="">Telegram kanal</a>
+    <a href="https://t.me/Insight_plus_admin" target="_blank" class="btn-link social-link"><img src="icons/admin.svg" class="btn-icon" alt="">Admin</a>
+    <a href="https://insightplus.uz/" target="_blank" class="btn-link social-link"><img src="icons/website.svg" class="btn-icon" alt="">WebSite</a>
+    <a href="tel:+998908124341" class="btn-link social-link"><img src="icons/phone.svg" class="btn-icon" alt="">Qo'ng'iroq qilish</a>
+    <a href="https://maps.app.goo.gl/gYdvf1PH1SZ7NwKu7" target="_blank" class="btn-link social-link"><img src="icons/map.svg" class="btn-icon" alt="">Manzil</a>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d435.82001424280617!2d69.2720371990519!3d40.21451773070214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38b197cc37d33007%3A0x772f49dae09ae997!2s677C%2BQWW%2C%20Bekobod%2C%20Tashkent%20Region%2C%20Uzbekistan!5e1!3m2!1sen!2s!4v1789992796129!5m2!1sen!2s" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="map-location-desc">Bekobod DKM va 2-maktab yonida</p>
+  </section>
+
+  <!-- 2-Ichki Sahifa: 8 ta kurs ro'yxati -->
+  <section id="kurslar-page" class="tab-page">
+    <a href="#ariza" data-course="Ingliz tili" class="btn-link course-link"><img src="icons/english.svg" class="btn-icon" alt="">Ingliz tili</a>
+    <a href="#ariza" data-course="CEFR" class="btn-link course-link"><img src="icons/cefr.svg" class="btn-icon" alt="">CEFR</a>
+    <a href="#ariza" data-course="IELTS" class="btn-link course-link"><img src="icons/ielts.svg" class="btn-icon" alt="">IELTS</a>
+    <a href="#ariza" data-course="Rus tili" class="btn-link course-link"><img src="icons/russian.svg" class="btn-icon" alt="">Rus tili</a>
+    <a href="#ariza" data-course="Matematika" class="btn-link course-link"><img src="icons/math.svg" class="btn-icon" alt="">Matematika</a>
+    <a href="#ariza" data-course="Kompyuter savodxonligi" class="btn-link course-link"><img src="icons/computer.svg" class="btn-icon" alt="">Kompyuter savodxonligi</a>
+    <a href="#ariza" data-course="Sun'iy intellekt" class="btn-link course-link"><img src="icons/ai.svg" class="btn-icon" alt="">Sun'iy intellekt</a>
+    <a href="#ariza" data-course="Dasturlash" class="btn-link course-link"><img src="icons/code.svg" class="btn-icon" alt="">Dasturlash</a>
+  </section>
+
+  <!-- 3-Ichki Sahifa: Kurslarga ro'yxatdan o'tish formasi -->
+  <section id="ariza-page" class="tab-page">
+    <form id="arizaForm">
+      <!-- 1. Ism, familiya -->
+      <label for="fullname">Ism, familiyangiz:</label>
+      <input type="text" id="fullname" name="fullname" placeholder="Aziz Karimov" inputmode="text" autocomplete="name" autocapitalize="words" required>
+
+      <!-- 2. Telefon raqami -->
+      <label for="phone">Telefon raqamingiz:</label>
+      <input type="tel" id="phone" name="phone" placeholder="+998 90 123 45 67" inputmode="tel" autocomplete="tel" required>
+
+      <!-- 3. Tug'ilgan yil -->
+      <label for="birthyear">Tug'ilgan yilingiz:</label>
+      <input type="text" id="birthyear" name="birthyear" placeholder="Masalan: 2005" inputmode="numeric" pattern="[0-9]*" maxlength="4" required>
+
+      <!-- 5. Qaysi kursga yozilmoqchisiz (select) -->
+      <label for="course">Qaysi kursga yozilmoqchisiz?</label>
+      <select id="course" name="course" required class="visually-hidden">
+        <option value="" disabled selected>Kursni tanlang...</option>
+        <option value="Ingliz tili">Ingliz tili</option>
+        <option value="CEFR">CEFR</option>
+        <option value="IELTS">IELTS</option>
+        <option value="Rus tili">Rus tili</option>
+        <option value="Matematika">Matematika</option>
+        <option value="Kompyuter savodxonligi">Kompyuter savodxonligi</option>
+        <option value="Sun'iy intellekt">Sun'iy intellekt</option>
+        <option value="Dasturlash">Dasturlash</option>
+      </select>
+
+      <!-- Loyiha dizaynidagi ochiluvchi kurslar tanlovi -->
+      <button type="button" id="customSelectTrigger" class="custom-select-trigger">Kursni tanlang...</button>
+      <p id="customSelectMenu" class="custom-select-menu">
+        <button type="button" class="custom-option" data-value="Ingliz tili">Ingliz tili</button>
+        <button type="button" class="custom-option" data-value="CEFR">CEFR</button>
+        <button type="button" class="custom-option" data-value="IELTS">IELTS</button>
+        <button type="button" class="custom-option" data-value="Rus tili">Rus tili</button>
+        <button type="button" class="custom-option" data-value="Matematika">Matematika</button>
+        <button type="button" class="custom-option" data-value="Kompyuter savodxonligi">Kompyuter savodxonligi</button>
+        <button type="button" class="custom-option" data-value="Sun'iy intellekt">Sun'iy intellekt</button>
+        <button type="button" class="custom-option" data-value="Dasturlash">Dasturlash</button>
+      </p>
+
+      <!-- 6. Hozirgi daraja (radio) -->
+      <p class="field-title">Hozirgi darajangiz:</p>
+      <p class="choice-group">
+        <label for="level_boshlangich" class="choice-label">
+          <input type="radio" id="level_boshlangich" name="level" value="Boshlang'ich" checked> Boshlang'ich
+        </label>
+        <label for="level_orta" class="choice-label">
+          <input type="radio" id="level_orta" name="level" value="O'rta"> O'rta
+        </label>
+        <label for="level_yuqori" class="choice-label">
+          <input type="radio" id="level_yuqori" name="level" value="Yuqori"> Yuqori
+        </label>
+      </p>
+
+      <!-- 7. Qulay dars vaqti (radio) -->
+      <p class="field-title">Qulay dars vaqti:</p>
+      <p class="choice-group choice-group-time">
+        <label for="time_tushdan_oldin" class="choice-label choice-label-time">
+          <input type="radio" id="time_tushdan_oldin" name="time" value="Tushdan oldin (07:00 – 12:00)" checked>
+          <strong class="choice-text">
+            Tushdan oldin
+            <small>07:00 – 12:00</small>
+          </strong>
+        </label>
+        <label for="time_tushdan_keyin" class="choice-label choice-label-time">
+          <input type="radio" id="time_tushdan_keyin" name="time" value="Tushdan keyin (14:00 – 18:00)">
+          <strong class="choice-text">
+            Tushdan keyin
+            <small>14:00 – 18:00</small>
+          </strong>
+        </label>
+        <label for="time_kechki" class="choice-label choice-label-time">
+          <input type="radio" id="time_kechki" name="time" value="Kechki payt (18:00 dan keyin)">
+          <strong class="choice-text">
+            Kechki payt
+            <small>18:00 dan keyin</small>
+          </strong>
+        </label>
+        <label for="time_farqi_yoq" class="choice-label choice-label-time">
+          <input type="radio" id="time_farqi_yoq" name="time" value="Farqi yo'q (Istalgan vaqt)">
+          <strong class="choice-text">
+            Farqi yo‘q
+            <small>Istalgan vaqt</small>
+          </strong>
+        </label>
+      </p>
+
+      <!-- 8. Ta'lim formati (checkbox) -->
+      <p class="field-title">Ta'lim formati:</p>
+      <p class="choice-group">
+        <label for="format_offline" class="choice-label">
+          <input type="checkbox" id="format_offline" name="format" value="Offline" checked> Offline
+        </label>
+        <label for="format_online" class="choice-label">
+          <input type="checkbox" id="format_online" name="format" value="Online"> Online
+        </label>
+      </p>
+
+      <!-- 9. Savol yoki izoh (textarea) -->
+      <label for="notes">Savol yoki izohingiz:</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="Qo'shimcha savollaringiz yoki maqsadlaringiz bo'lsa yozing..." inputmode="text" autocapitalize="sentences"></textarea>
+
+      <!-- 10. Rozilik (checkbox) -->
+      <label for="consent" class="consent-label">
+        <input type="checkbox" id="consent" name="consent" required> Men bilan bog'lanishlariga roziman
+      </label>
+
+      <!-- 11. Yuborish tugmasi -->
+      <button type="submit" id="submitBtn">Ro'yxatdan o'tish</button>
+
+      <!-- Holat xabari (muvaffaqiyat yoki xato) -->
+      <p id="statusMsg" class="status-message"></p>
+    </form>
+  </section>
+
+  <br>
+  <p class="footer-text">
+    © 2026 InsightPlus o‘quv markazi<br>
+    Crafted by <a href="https://t.me/bkzd19" target="_blank" rel="noopener noreferrer" class="creator-link">1bkzd</a>
+  </p>
+
+  <!-- Suzib yuruvchi tezkor aloqa va ro'yxatdan o'tish paneli (Mobile Floating Dock) -->
+  <p class="floating-dock">
+    <a href="tel:+998908124341" class="float-btn float-call"><img src="icons/phone.svg" class="float-icon" alt="">Qo'ng'iroq qilish</a>
+    <a href="#ariza" class="float-btn float-register">Ro'yxatdan o'tish</a>
+  </p>
+
+  <!-- Maxsus Ulashish (Share) Modali (Fallback) -->
+  <aside id="shareModal" class="share-modal" aria-hidden="true">
+    <button type="button" class="share-backdrop" id="shareBackdrop" aria-label="Yopish"></button>
+    <section class="share-sheet" role="dialog" aria-labelledby="shareTitle">
+      <p class="share-header">
+        <strong id="shareTitle" class="share-title">Ulashish</strong>
+        <button type="button" class="share-close" id="shareCloseBtn" aria-label="Yopish">&times;</button>
+      </p>
+      <p class="share-options">
+        <button type="button" class="share-action-btn" id="copyLinkBtn">
+          <img src="icons/copy.svg" class="btn-icon" alt="">
+          <strong id="copyLinkText">Havoladan nusxa olish</strong>
+        </button>
+        <a href="https://t.me/share/url?url=https%3A%2F%2Finsightplus.uz&text=InsightPlus%20o%27quv%20markazi%20%E2%80%94%20Kelajagingizni%20biz%20bilan%20quring!" target="_blank" class="share-action-btn" id="shareTelegramBtn">
+          <img src="icons/telegram.svg" class="btn-icon" alt="">
+          <strong>Telegram orqali ulashish</strong>
+        </a>
+        <a href="sms:?body=InsightPlus%20o%27quv%20markazi%3A%20https%3A%2F%2Finsightplus.uz" class="share-action-btn" id="shareSmsBtn">
+          <img src="icons/phone.svg" class="btn-icon" alt="">
+          <strong>SMS orqali ulashish</strong>
+        </a>
+      </p>
+    </section>
+  </aside>
+
+  <script src="script.js?v=35"></script>
+</body>
+</html>
