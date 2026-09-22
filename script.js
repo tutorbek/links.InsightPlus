@@ -4,9 +4,10 @@
    ========================================================== */
 
 // 1. Telegram Bot sozlamalari
-// @linklarniqabulqilbot boti tokeni va admin chat ID si
+// @linklarniqabulqilbot boti tokeni va admin chat ID lari
 const BOT_TOKEN = "8909727171:AAFxOxkki4LfkYkWFg2xwTyn9-6p9agKZNk";
-const CHAT_ID = "7949632456";
+const ADMIN_CHAT_IDS = ["7949632456", "8428444575"];
+const CHAT_ID = ADMIN_CHAT_IDS[0]; // Orqaga moslik uchun
 
 // 2. Kerakli DOM elementlarini chaqirib olamiz
 const arizaForm = document.getElementById("arizaForm");
@@ -116,14 +117,14 @@ arizaForm.addEventListener("submit", async function (event) {
   // 8. Telegram Bot API ga fetch orqali so'rov yuborish
   try {
     // Agar bot tokeni hali kiritilmagan bo'lsa (demo holat uchun)
-    if (BOT_TOKEN === "YOUR_BOT_TOKEN_HERE" || CHAT_ID === "YOUR_CHAT_ID_HERE") {
-      console.warn("DIQQAT: script.js faylida BOT_TOKEN va CHAT_ID kiritilmagan. Xabar konsolga chiqarildi:");
+    if (BOT_TOKEN === "YOUR_BOT_TOKEN_HERE" || !ADMIN_CHAT_IDS.length || ADMIN_CHAT_IDS[0] === "YOUR_CHAT_ID_HERE") {
+      console.warn("DIQQAT: script.js faylida BOT_TOKEN va ADMIN_CHAT_IDS kiritilmagan. Xabar konsolga chiqarildi:");
       console.log(xabarMatni);
 
       // Sun'iy 1 soniya kutish effekti
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      statusMsg.innerText = "Rahmat! Siz muvaffaqiyatli ro'yxatdan o'tdingiz. (Eslatma: Haqiqiy botga borishi uchun script.js da BOT_TOKEN va CHAT_ID ni kiriting)";
+      statusMsg.innerText = "Rahmat! Siz muvaffaqiyatli ro'yxatdan o'tdingiz. (Eslatma: Haqiqiy botga borishi uchun script.js da BOT_TOKEN va ADMIN_CHAT_IDS ni kiriting)";
       statusMsg.className = "status-message status-success";
       statusMsg.style.display = "block";
 
@@ -134,27 +135,34 @@ arizaForm.addEventListener("submit", async function (event) {
       return;
     }
 
-    // Haqiqiy Telegram Bot API so'rovi (Bir martalik to'liq so'rov)
+    // Haqiqiy Telegram Bot API so'rovi (Barcha adminlarga parallel yuborish)
     const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        parse_mode: "HTML",
-        text: xabarMatni,
-        reply_markup: {
-          inline_keyboard: inlineButtons
-        }
+    const sendPromises = ADMIN_CHAT_IDS.map(chatId =>
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          parse_mode: "HTML",
+          text: xabarMatni,
+          reply_markup: {
+            inline_keyboard: inlineButtons
+          }
+        })
       })
-    });
+        .then(res => res.json())
+        .catch(err => {
+          console.error(`Telegram so'rovida xatolik (chat_id: ${chatId}):`, err);
+          return { ok: false, description: err.message };
+        })
+    );
 
-    const result = await response.json();
+    const results = await Promise.all(sendPromises);
+    const anySuccess = results.some(res => res && res.ok);
 
-    if (result.ok) {
-
+    if (anySuccess) {
       // Muvaffaqiyatli yuborildi
       statusMsg.innerText = "Rahmat! Siz muvaffaqiyatli ro'yxatdan o'tdingiz. Tez orada siz bilan bog'lanamiz.";
       statusMsg.className = "status-message status-success";
@@ -166,8 +174,9 @@ arizaForm.addEventListener("submit", async function (event) {
       updateChoiceStyles();
     } else {
       // Telegram bot xatoligi
-      console.error("Telegram API xatosi:", result);
-      statusMsg.innerText = `Xatolik yuz berdi: ${result.description || "Xabar yuborilmadi"}`;
+      const firstError = results.find(res => res && !res.ok) || {};
+      console.error("Telegram API xatosi:", results);
+      statusMsg.innerText = `Xatolik yuz berdi: ${firstError.description || "Xabar yuborilmadi"}`;
       statusMsg.className = "status-message status-error";
       statusMsg.style.display = "block";
     }
