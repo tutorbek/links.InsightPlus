@@ -5,6 +5,122 @@ if (window.location.hash) {
 }
 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
+// Slow, damped touch momentum. No render loop runs while the page is idle.
+function setupSmoothScroll() {
+  if (typeof window.Lenis !== 'function') return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const editable = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])';
+  // Older iOS releases use their native touch momentum.
+  const iosVersion = navigator.userAgent.match(/(?:iPhone|iPad|iPod).*OS (\d+)_/);
+  if (iosVersion && Number(iosVersion[1]) < 16) return;
+  let controller;
+  let frameId = 0;
+  let lastFrame = 0;
+  let animationTime = 0;
+  let pinching = false;
+  let rendering = false;
+  let touchVelocity = 0;
+  let lastTouchTime = 0;
+
+  function render(time) {
+    frameId = 0;
+    if (!controller) return;
+    animationTime += lastFrame ? Math.min(time - lastFrame, 50) : 1000 / 60;
+    lastFrame = time;
+    rendering = true;
+    controller.raf(animationTime);
+    rendering = false;
+    if (controller.isScrolling === 'smooth') frameId = requestAnimationFrame(render);
+    else lastFrame = 0;
+  }
+
+  function wake() {
+    if (!frameId && !rendering && !document.hidden) frameId = requestAnimationFrame(render);
+  }
+
+  function sync() {
+    const useNative = reducedMotion.matches || document.hidden || document.activeElement?.matches(editable);
+    if (useNative) {
+      cancelAnimationFrame(frameId);
+      frameId = lastFrame = 0;
+      controller?.destroy();
+      controller = undefined;
+      pinching = false;
+      return;
+    }
+    if (controller) return;
+    controller = new Lenis({
+      autoRaf: false,
+      smoothWheel: true,
+      lerp: .065,
+      wheelMultiplier: .65,
+      syncTouch: true,
+      touchMultiplier: .72,
+      anchors: true,
+      stopInertiaOnNavigate: true,
+      prevent: node => node.matches(editable),
+      virtualScroll: ({ event, deltaX, deltaY }) => {
+        // Leave pinch zoom and sideways gestures to the browser.
+        if (event.touches?.length > 1) {
+          pinching = true;
+          controller.scrollTo(controller.actualScroll, { immediate: true });
+        }
+        if (pinching) {
+          touchVelocity = 0;
+          if (event.type === 'touchend' && event.touches.length === 0) pinching = false;
+          return false;
+        }
+        if (event.ctrlKey || Math.abs(deltaY) < Math.abs(deltaX)) {
+          touchVelocity = 0;
+          return false;
+        }
+        const now = performance.now();
+        if (event.type === 'touchstart') {
+          touchVelocity = 0;
+          lastTouchTime = now;
+        } else if (event.type === 'touchmove') {
+          // Use finger speed rather than frame velocity, which can become
+          // zero between touch events on slower phones.
+          const speed = deltaY / Math.max(8, now - lastTouchTime);
+          touchVelocity = touchVelocity * .35 + speed * .65;
+          lastTouchTime = now;
+        } else if (event.type === 'touchend') {
+          if (now - lastTouchTime < 100 && Math.abs(touchVelocity) > .08) {
+            const momentum = Math.sign(touchVelocity) * Math.min(Math.abs(touchVelocity) * 220, innerHeight * .32);
+            controller.scrollTo(controller.targetScroll + momentum, { lerp: .06, programmatic: false });
+            wake();
+          }
+          touchVelocity = 0;
+          return false;
+        }
+        return true;
+      }
+    });
+    controller.on('virtual-scroll', wake);
+    controller.on('scroll', wake);
+  }
+
+  reducedMotion.addEventListener('change', sync);
+  document.addEventListener('visibilitychange', sync);
+  document.addEventListener('focusin', sync);
+  document.addEventListener('focusout', () => queueMicrotask(sync));
+  window.addEventListener('touchcancel', () => {
+    pinching = false;
+    touchVelocity = 0;
+    controller?.scrollTo(controller.actualScroll, { immediate: true });
+  }, { passive: true });
+  window.addEventListener('pagehide', () => {
+    cancelAnimationFrame(frameId);
+    frameId = lastFrame = 0;
+    controller?.destroy();
+    controller = undefined;
+    pinching = false;
+  });
+  window.addEventListener('pageshow', sync);
+  sync();
+}
+setupSmoothScroll();
+
 // Reserve the card immediately; request the map shortly before it is visible.
 const mapCard = document.getElementById('locationMap');
 const mapStatus = mapCard.querySelector('.map-status');

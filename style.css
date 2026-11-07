@@ -20,6 +20,8 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding: 24px 0 110px; }
+/* The inertia controller owns easing while active; native scroll is the fallback. */
+html.lenis { scroll-behavior: auto; }
 body { isolation: isolate; max-width: 520px; margin: auto; padding: calc(34px + env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) calc(110px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); line-height: 1.5; }
 [hidden] { display: none !important; }
 a { color: inherit; text-decoration: none; }
