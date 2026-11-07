@@ -20,7 +20,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding: 24px 0 110px; }
-body { isolation: isolate; max-width: 520px; margin: auto; padding: 34px 24px calc(110px + env(safe-area-inset-bottom)); line-height: 1.5; }
+body { isolation: isolate; max-width: 520px; margin: auto; padding: calc(34px + env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) calc(110px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); line-height: 1.5; }
 [hidden] { display: none !important; }
 a { color: inherit; text-decoration: none; }
 button, input { font: inherit; }
@@ -107,7 +107,7 @@ form > input { scroll-margin-block: 32px 120px; }
  #submitBtn:hover { background: #205cb3; }
 }
 @media (max-width: 360px) {
- body { padding: 24px 16px calc(110px + env(safe-area-inset-bottom)); }
+ body { padding: calc(24px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) calc(110px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
  .identity-row { gap: 8px; }
  .brand-header { padding: 10px; }
  .social-link { font-size: 10px; }
@@ -125,7 +125,8 @@ form > input { scroll-margin-block: 32px 120px; }
 
 /* Inline disclosure expands the form instead of covering the page. */
 .course-select { min-width: 0; }
-.course-picker { width: 100%; min-height: 50px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 15px; border: 1px solid #cbd5e0; border-radius: 13px; background: rgba(255,255,255,.8); color: var(--muted); text-align: left; font-size: 15px; }
+.course-picker { width: 100%; min-width: 0; height: 50px; min-height: 50px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 15px; border: 1px solid #cbd5e0; border-radius: 13px; background: rgba(255,255,255,.8); color: var(--muted); text-align: left; font-size: 15px; }
+#courseSelection { display: block; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; }
 .course-picker svg { flex-shrink: 0; transition: transform .18s ease; }
 .course-picker[aria-expanded="true"] svg { transform: rotate(180deg); }
 .course-picker.has-selection { color: var(--ink); }
