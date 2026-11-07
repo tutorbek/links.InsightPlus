@@ -21,6 +21,17 @@ function setupSmoothScroll() {
   let rendering = false;
   let touchVelocity = 0;
   let lastTouchTime = 0;
+  let touchActive = false;
+  let touchAxis;
+  let pendingTouchX = 0;
+  let pendingTouchY = 0;
+
+  function interruptMotion() {
+    controller?.scrollTo(controller.actualScroll, { immediate: true });
+    cancelAnimationFrame(frameId);
+    frameId = lastFrame = 0;
+    touchVelocity = 0;
+  }
 
   function render(time) {
     frameId = 0;
@@ -46,6 +57,7 @@ function setupSmoothScroll() {
       controller?.destroy();
       controller = undefined;
       pinching = false;
+      touchActive = false;
       return;
     }
     if (controller) return;
@@ -60,44 +72,73 @@ function setupSmoothScroll() {
       stopInertiaOnNavigate: true,
       prevent: node => node.matches(editable),
       virtualScroll: ({ event, deltaX, deltaY }) => {
+        const now = performance.now();
+        if (event.type === 'touchstart') {
+          // Catch the visible position immediately, discarding the old target
+          // and its scheduled frame before the next finger movement.
+          interruptMotion();
+          touchActive = false;
+          touchAxis = undefined;
+          pendingTouchX = pendingTouchY = 0;
+          lastTouchTime = now;
+        }
         // Leave pinch zoom and sideways gestures to the browser.
         if (event.touches?.length > 1) {
           pinching = true;
-          controller.scrollTo(controller.actualScroll, { immediate: true });
+          interruptMotion();
         }
         if (pinching) {
           touchVelocity = 0;
           if (event.type === 'touchend' && event.touches.length === 0) pinching = false;
           return false;
         }
-        if (event.ctrlKey || Math.abs(deltaY) < Math.abs(deltaX)) {
-          touchVelocity = 0;
+        // The hook runs before Lenis checks exclusions. Apply them here too,
+        // so map gestures and form controls never start page momentum.
+        if (event.composedPath().some(node => node instanceof HTMLElement &&
+          (node.matches(editable) || node.hasAttribute('data-lenis-prevent')))) {
+          touchActive = false;
           return false;
         }
-        const now = performance.now();
         if (event.type === 'touchstart') {
-          touchVelocity = 0;
-          lastTouchTime = now;
+          touchActive = true;
+          return false;
         } else if (event.type === 'touchmove') {
+          if (!touchActive) return false;
+          if (!touchAxis) {
+            pendingTouchX += deltaX;
+            pendingTouchY += deltaY;
+            if (Math.max(Math.abs(pendingTouchX), Math.abs(pendingTouchY)) < 4) return false;
+            touchAxis = Math.abs(pendingTouchY) >= Math.abs(pendingTouchX) ? 'vertical' : 'horizontal';
+            deltaY = pendingTouchY;
+          }
+          if (touchAxis !== 'vertical') return false;
+          if (event.cancelable) event.preventDefault();
           // Use finger speed rather than frame velocity, which can become
           // zero between touch events on slower phones.
           const speed = deltaY / Math.max(8, now - lastTouchTime);
-          touchVelocity = touchVelocity * .35 + speed * .65;
+          touchVelocity = speed * touchVelocity < 0 ? speed : touchVelocity * .35 + speed * .65;
           lastTouchTime = now;
+          // Track the finger directly. Easing during a drag creates lag when
+          // catching an existing flick or reversing direction.
+          controller.scrollTo(controller.actualScroll + deltaY, { immediate: true });
+          return false;
         } else if (event.type === 'touchend') {
-          if (now - lastTouchTime < 100 && Math.abs(touchVelocity) > .08) {
+          if (touchActive && touchAxis === 'vertical' && now - lastTouchTime < 100 && Math.abs(touchVelocity) > .08) {
             const momentum = Math.sign(touchVelocity) * Math.min(Math.abs(touchVelocity) * 220, innerHeight * .32);
-            controller.scrollTo(controller.targetScroll + momentum, { lerp: .06, programmatic: false });
+            controller.scrollTo(controller.actualScroll + momentum, { lerp: .06, programmatic: false });
             wake();
           }
+          touchActive = false;
           touchVelocity = 0;
           return false;
         }
-        return true;
+        return !event.ctrlKey && Math.abs(deltaY) >= Math.abs(deltaX);
       }
     });
     controller.on('virtual-scroll', wake);
-    controller.on('scroll', wake);
+    controller.on('scroll', () => {
+      if (controller.isScrolling === 'smooth') wake();
+    });
   }
 
   reducedMotion.addEventListener('change', sync);
@@ -106,8 +147,8 @@ function setupSmoothScroll() {
   document.addEventListener('focusout', () => queueMicrotask(sync));
   window.addEventListener('touchcancel', () => {
     pinching = false;
-    touchVelocity = 0;
-    controller?.scrollTo(controller.actualScroll, { immediate: true });
+    touchActive = false;
+    interruptMotion();
   }, { passive: true });
   window.addEventListener('pagehide', () => {
     cancelAnimationFrame(frameId);
@@ -115,6 +156,7 @@ function setupSmoothScroll() {
     controller?.destroy();
     controller = undefined;
     pinching = false;
+    touchActive = false;
   });
   window.addEventListener('pageshow', sync);
   sync();
