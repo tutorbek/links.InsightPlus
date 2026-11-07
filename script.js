@@ -51,11 +51,24 @@ function loadLocationMap() {
 
 mapRetry.addEventListener('click', loadLocationMap);
 if ('IntersectionObserver' in window) {
+  let mapIsNear = false;
+  let mapLoadTimer;
+  // Let native touch momentum / smooth scrolling settle before starting
+  // the third-party frame. Listen only until the first map request.
+  const scheduleMapLoad = () => {
+    clearTimeout(mapLoadTimer);
+    if (!mapIsNear) return;
+    mapLoadTimer = setTimeout(() => {
+      window.removeEventListener('scroll', scheduleMapLoad);
+      mapObserver.disconnect();
+      loadLocationMap();
+    }, 180);
+  };
   const mapObserver = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting)) return;
-    mapObserver.disconnect();
-    loadLocationMap();
+    mapIsNear = entries.some(entry => entry.isIntersecting);
+    scheduleMapLoad();
   }, { rootMargin: '180px 0px' });
+  window.addEventListener('scroll', scheduleMapLoad, { passive: true });
   mapObserver.observe(mapCard);
 } else {
   loadLocationMap();

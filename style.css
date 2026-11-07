@@ -86,7 +86,7 @@ form > input::placeholder { color: #6b7785; }
 .float-btn:active, #submitBtn:active { transform: scale(.98); }
 /* Radial gradients have soft edges without an animated blur filter.
    This fixed, clipped layer cannot intercept input or widen the page. */
-.ambient-background { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict; background: var(--paper); }
+.ambient-background { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict; background: var(--paper); transform: translateZ(0); }
 .ambient-orb { position: absolute; width: min(100vw, 760px); height: min(90vh, 760px); border-radius: 50%; }
 .ambient-sky { left: -22%; top: -20%; background: radial-gradient(ellipse, var(--sky) 0%, transparent 70%); }
 .ambient-mint { right: -24%; top: 0; background: radial-gradient(ellipse, var(--mint) 0%, transparent 70%); }
@@ -118,9 +118,15 @@ form > input::placeholder { color: #6b7785; }
   backdrop-filter: none;
  }
  .ambient-background {
+  /* A stable height avoids repainting the gradients as browser bars retract. */
+  bottom: auto;
+  height: 100vh;
+  height: 100lvh;
   background: radial-gradient(ellipse at 0% 10%, #dcecfb, transparent 65%), radial-gradient(ellipse at 100% 25%, #def1ea, transparent 65%), radial-gradient(ellipse at 10% 100%, #f8e6dc, transparent 60%), radial-gradient(ellipse at 100% 85%, #e9e2f6, transparent 60%), var(--paper);
  }
  .ambient-orb { display: none; }
+ /* Only these two fixed surfaces need their own compositing layers. */
+ .floating-dock { transform: translate3d(-50%, 0, 0); }
 }
 form > input { scroll-margin-block: 32px 120px; }
 .social-link { border-radius: 14px; }
