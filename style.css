@@ -65,8 +65,17 @@ form > input::placeholder { color: #6b7785; }
 .status-message { display: none; margin-top: 12px; font-size: 13px; }
 .status-error { color: #a12222; }
 .location-section { margin-top: 30px; }
-.map-preview { height: 220px; margin-top: 16px; overflow: hidden; padding: 5px; border: 1px solid var(--line); border-radius: 26px; background: var(--glass-solid); box-shadow: var(--glass-shadow); }
-.location-map { display: block; height: 100%; width: 100%; border: 0; border-radius: 20px; }
+.map-preview { position: relative; isolation: isolate; height: 220px; min-height: 220px; margin-top: 16px; overflow: hidden; padding: 5px; border: 1px solid var(--line); border-radius: 26px; background: var(--glass-solid); box-shadow: var(--glass-shadow); }
+.map-placeholder { position: absolute; inset: 5px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; border-radius: 20px; background: radial-gradient(ellipse at 20% 15%, #dcecfb, transparent 65%), radial-gradient(ellipse at 85% 85%, #dcf0e8, transparent 65%), #edf3fa; }
+.map-pin { color: var(--blue); margin-bottom: 3px; }
+.map-placeholder strong { font-size: 15px; font-weight: 600; }
+.map-status { color: var(--muted); font-size: 12px; text-align: center; padding: 0 12px; }
+.map-retry { margin-top: 4px; padding: 6px 12px; border: 1px solid #cbd5e0; border-radius: 10px; background: #ffffffb3; color: var(--blue); font-size: 12px; }
+.location-map { position: relative; display: block; height: 100%; width: 100%; border: 0; border-radius: 20px; background: var(--glass-solid); opacity: 0; visibility: hidden; transition: opacity .25s ease; }
+.map-preview.is-ready .location-map { opacity: 1; visibility: visible; }
+.map-preview.is-ready .map-placeholder { visibility: hidden; }
+.map-open-link { display: inline-block; margin-top: 10px; color: var(--blue); font-size: 12px; text-underline-offset: 3px; }
+.map-open-link:hover { text-decoration: underline; }
 .map-location-desc { margin-top: 5px; color: var(--muted); font-size: 11px; font-weight: 500; line-height: 1.5; }
 .footer-text { margin-top: 30px; text-align: center; font-size: 11px; line-height: 1.9; color: var(--muted); }
 .creator-link { text-decoration: underline; text-underline-offset: 3px; }
@@ -97,6 +106,21 @@ form > input::placeholder { color: #6b7785; }
  }
  .registration-card { background: rgba(255,255,255,.65); }
  .floating-dock { background: rgba(255,255,255,.72); }
+ /* Keep the embedded map out of backdrop compositing while scrolling. */
+ .map-preview { background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+/* Mobile glass uses a tinted surface instead of resampling the moving page.
+   One static background also avoids allocating four full-screen color layers. */
+@media (max-width: 699px), (pointer: coarse) {
+ .brand-header, .social-grid, .course-list, .registration-card, .floating-dock {
+  background: rgba(245,248,252,.94);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+ }
+ .ambient-background {
+  background: radial-gradient(ellipse at 0% 10%, #dcecfb, transparent 65%), radial-gradient(ellipse at 100% 25%, #def1ea, transparent 65%), radial-gradient(ellipse at 10% 100%, #f8e6dc, transparent 60%), radial-gradient(ellipse at 100% 85%, #e9e2f6, transparent 60%), var(--paper);
+ }
+ .ambient-orb { display: none; }
 }
 form > input { scroll-margin-block: 32px 120px; }
 .social-link { border-radius: 14px; }

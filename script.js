@@ -5,6 +5,62 @@ if (window.location.hash) {
 }
 window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
+// Reserve the card immediately; request the map shortly before it is visible.
+const mapCard = document.getElementById('locationMap');
+const mapStatus = mapCard.querySelector('.map-status');
+const mapRetry = mapCard.querySelector('.map-retry');
+let mapFrame;
+let mapTimeout;
+
+function loadLocationMap() {
+  clearTimeout(mapTimeout);
+  mapFrame?.remove();
+  mapCard.classList.remove('is-ready');
+  mapCard.setAttribute('aria-busy', 'true');
+  mapStatus.textContent = 'Xarita yuklanmoqda…';
+  mapRetry.hidden = true;
+
+  const frame = document.createElement('iframe');
+  mapFrame = frame;
+  frame.className = 'location-map';
+  frame.title = 'InsightPlus manzili — Yandex Maps';
+  frame.allowFullscreen = true;
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
+  // Hidden frames stay out of keyboard navigation until loading finishes.
+  frame.tabIndex = -1;
+  const showFallback = () => {
+    if (mapFrame !== frame) return;
+    clearTimeout(mapTimeout);
+    mapCard.setAttribute('aria-busy', 'false');
+    mapStatus.textContent = 'Xarita yuklanmadi. Qayta urinib ko‘ring.';
+    mapRetry.hidden = false;
+  };
+  frame.addEventListener('load', () => {
+    if (mapFrame !== frame) return;
+    clearTimeout(mapTimeout);
+    mapCard.classList.add('is-ready');
+    mapCard.setAttribute('aria-busy', 'false');
+    frame.removeAttribute('tabindex');
+    mapRetry.hidden = true;
+  }, { once: true });
+  frame.addEventListener('error', showFallback, { once: true });
+  frame.src = mapCard.dataset.mapSrc;
+  mapTimeout = setTimeout(showFallback, 15000);
+  mapCard.append(frame);
+}
+
+mapRetry.addEventListener('click', loadLocationMap);
+if ('IntersectionObserver' in window) {
+  const mapObserver = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    mapObserver.disconnect();
+    loadLocationMap();
+  }, { rootMargin: '180px 0px' });
+  mapObserver.observe(mapCard);
+} else {
+  loadLocationMap();
+}
+
 // Ro‘yxatdan o‘tish: admin chatini tayyor xabar bilan ochish.
 const ADMIN_USERNAME = "Insight_plus_admin";
 const arizaForm = document.getElementById("arizaForm");
@@ -155,7 +211,8 @@ arizaForm.addEventListener("submit", event => {
 // Only transforms animate; no per-frame JS or layout reads.
 function animateColorLayers(selector, settings) {
   const orbs = [...document.querySelectorAll(selector)];
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // Phones keep the same palette without eight permanent animated layers.
+  const staticColors = window.matchMedia('(max-width: 699px), (pointer: coarse), (prefers-reduced-motion: reduce)');
   const animations = new Set();
   const random = (min, max) => min + Math.random() * (max - min);
   const transform = ({ x, y }) => `translate(${x}%, ${y}%)`;
@@ -191,12 +248,12 @@ function animateColorLayers(selector, settings) {
       animations.delete(animation);
       orb.style.transform = transform(to);
       animation.cancel();
-      if (!reducedMotion.matches) drift(orb, to);
+      if (!staticColors.matches) drift(orb, to);
     };
   }
 
   function syncMotion() {
-    if (reducedMotion.matches) {
+    if (staticColors.matches) {
       animations.forEach(animation => animation.cancel());
       animations.clear();
       orbs.forEach(orb => { orb.style.transform = ''; });
@@ -205,7 +262,7 @@ function animateColorLayers(selector, settings) {
     if (!animations.size && typeof Element.prototype.animate === 'function') orbs.forEach(orb => drift(orb, undefined, true));
     animations.forEach(animation => document.hidden ? animation.pause() : animation.play());
   }
-  reducedMotion.addEventListener('change', syncMotion);
+  staticColors.addEventListener('change', syncMotion);
   document.addEventListener('visibilitychange', syncMotion);
   syncMotion();
 }

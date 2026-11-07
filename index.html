@@ -9,8 +9,8 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=3">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
-  <link rel="preconnect" href="https://yandex.uz">
-  <link rel="stylesheet" href="style.css?v=73">
+  <link rel="dns-prefetch" href="//yandex.uz">
+  <link rel="stylesheet" href="style.css?v=75">
 </head>
 <body>
   <div class="ambient-background" aria-hidden="true">
@@ -72,9 +72,15 @@
   <section class="location-section" aria-labelledby="locationTitle">
     <h2 id="locationTitle">Bizni toping</h2>
     <p class="map-location-desc">Bekobod · DKM va 2-maktab yonida</p>
-    <div class="map-preview">
-      <iframe class="location-map" title="InsightPlus manzili — Yandex Maps" src="https://yandex.uz/map-widget/v1/?ll=69.272315%2C40.214464&amp;pt=69.272315%2C40.214464%2Cpm2blm&amp;z=17&amp;l=map&amp;lang=ru_RU" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <div class="map-preview" id="locationMap" data-map-src="https://yandex.uz/map-widget/v1/?ll=69.272315%2C40.214464&amp;pt=69.272315%2C40.214464%2Cpm2blm&amp;z=17&amp;l=map&amp;lang=ru_RU">
+      <div class="map-placeholder">
+        <svg class="map-pin" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <strong>InsightPlus</strong>
+        <p class="map-status" role="status">Bekobod · DKM va 2-maktab yonida</p>
+        <button type="button" class="map-retry" hidden>Qayta urinish</button>
+      </div>
     </div>
+    <a class="map-open-link" href="https://yandex.uz/maps/?ll=69.272315%2C40.214464&amp;pt=69.272315%2C40.214464%2Cpm2blm&amp;z=17" target="_blank" rel="noopener noreferrer">Yandex Maps’da ochish ↗</a>
   </section>
   </main>
   <p class="footer-text">
@@ -88,6 +94,6 @@
     </a>
   </p>
 
-  <script src="script.js?v=59"></script>
+  <script src="script.js?v=61"></script>
 </body>
 </html>
