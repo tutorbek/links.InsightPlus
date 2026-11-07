@@ -4,99 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>InsightPlus o'quv markazi | Linktree</title>
-  <script>
-    // O‘zbekiston fasllari: brauzerning vaqt mintaqasiga bog‘liq emas.
-    const seasonalBackgrounds = {
-      "winter": {
-        "mobile": "images/optimized/winter-mobile-c5b18e9462.webp",
-        "desktop": "images/optimized/winter-desktop-314c557c75.webp"
-      },
-      "spring": {
-        "mobile": "images/optimized/spring-mobile-0a49453076.webp",
-        "desktop": "images/optimized/spring-desktop-226f40c155.webp"
-      },
-      "summer": {
-        "mobile": "images/optimized/summer-mobile-0a642ee2cf.webp",
-        "desktop": "images/optimized/summer-desktop-641e95cc15.webp"
-      },
-      "autumn": {
-        "mobile": "images/optimized/autumn-mobile-7193c1f9ae.webp",
-        "desktop": "images/optimized/autumn-desktop-dd9781786f.webp"
-      }
-    };
-    const mobileBackground = window.matchMedia("(max-width: 600px)");
-
-    function getSeason(date = new Date()) {
-      const month = Number(new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Tashkent",
-        month: "numeric"
-      }).format(date));
-      return ["winter", "spring", "summer", "autumn"][Math.floor((month % 12) / 3)];
-    }
-
-    // Fasl fonini vaqtincha ko‘rish; avtomatik fasl uchun null qo‘yiladi.
-    const SEASON_PREVIEW = null;
-    function updateSeasonBackground() {
-      const season = SEASON_PREVIEW || getSeason();
-      const source = seasonalBackgrounds[season][mobileBackground.matches ? "mobile" : "desktop"];
-      let preload = document.getElementById("seasonBackgroundPreload");
-      if (!preload) {
-        preload = document.createElement("link");
-        preload.id = "seasonBackgroundPreload";
-        preload.rel = "preload";
-        preload.as = "image";
-        preload.fetchPriority = "high";
-        document.head.appendChild(preload);
-      }
-      preload.href = source;
-      document.documentElement.dataset.season = season;
-      document.documentElement.style.setProperty("--season-background", `url("${source}")`);
-    }
-    updateSeasonBackground();
-    mobileBackground.addEventListener("change", updateSeasonBackground);
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) updateSeasonBackground();
-    });
-  </script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=3">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
-  <link rel="stylesheet" href="style.css?v=51">
+  <link rel="preconnect" href="https://yandex.uz">
+  <link rel="stylesheet" href="style.css?v=71">
 </head>
 <body>
+  <div class="ambient-background" aria-hidden="true">
+    <span class="ambient-orb ambient-sky"></span>
+    <span class="ambient-orb ambient-mint"></span>
+    <span class="ambient-orb ambient-peach"></span>
+    <span class="ambient-orb ambient-lavender"></span>
+  </div>
 
+  <div class="identity-row">
   <header class="brand-header">
-    <img src="logo.png" alt="InsightPlus" class="logo">
+    <img src="logo.webp" width="174" height="92" alt="InsightPlus" fetchpriority="high" class="logo">
   </header>
 
-  <main>
   <nav id="tarmoqlar-page" class="social-grid" aria-label="Ijtimoiy tarmoqlar va aloqa">
     <a href="https://www.instagram.com/insightplus_lc/" target="_blank" rel="noopener noreferrer" class="social-link"><span class="social-icon"><img src="icons/instagram.svg" alt=""></span>Instagram</a>
     <a href="https://t.me/insightlc" target="_blank" rel="noopener noreferrer" class="social-link"><span class="social-icon"><img src="icons/telegram.svg" alt=""></span>Telegram</a>
     <a href="https://t.me/Insight_plus_admin" target="_blank" rel="noopener noreferrer" class="social-link"><span class="social-icon"><img src="icons/admin.svg" alt=""></span>Admin</a>
   </nav>
+  </div>
 
+  <main>
   <section id="kurslar-page" class="courses-section" aria-labelledby="coursesTitle">
-    <div class="section-heading"><h2 id="coursesTitle">Kurslar</h2></div>
+    <h2 id="coursesTitle">Kurslar</h2>
     <ul class="course-list">
       <li class="course-item"><span class="course-icon"><img src="icons/english.svg" alt=""></span><span>Ingliz Tili</span></li>
-      <li class="course-item course-tech"><span class="course-icon"><img src="icons/code.svg" alt=""></span><span>Dasturlash<small>AI Engineering</small></span></li>
+      <li class="course-item"><span class="course-icon"><img src="icons/code.svg" alt=""></span><span>Dasturlash<small>AI Engineering</small></span></li>
       <li class="course-item"><span class="course-icon"><img src="icons/russian.svg" alt=""></span><span>Rus Tili</span></li>
       <li class="course-item"><span class="course-icon"><img src="icons/math.svg" alt=""></span><span>Matematika</span></li>
     </ul>
   </section>
 
-  <section id="ariza-page" class="registration-section" aria-labelledby="registrationTitle" hidden>
-    <h2 id="registrationTitle" tabindex="-1">Telegramdan yozish</h2>
-    <form id="arizaForm">
+  <section id="ariza-page" class="registration-section" aria-labelledby="registrationTitle">
+    <h2 id="registrationTitle">Telegramdan yozish</h2>
+    <form id="arizaForm" class="registration-card">
       <label for="fullname">Ismingiz:</label>
-      <input type="text" id="fullname" name="fullname" placeholder="Aziz" inputmode="text" autocomplete="given-name" autocapitalize="words" required>
+      <input type="text" id="fullname" name="fullname" placeholder="Masalan: Bekzod" inputmode="text" autocomplete="given-name" autocapitalize="words" required>
 
       <label for="phone">Telefon raqamingiz:</label>
-      <input type="tel" id="phone" name="phone" placeholder="+998 90 123 45 67" inputmode="tel" autocomplete="tel" required>
+      <input type="tel" id="phone" name="phone" placeholder="+998 90 123 45 67" inputmode="numeric" autocomplete="tel" required>
 
       <label for="birthyear">Tug‘ilgan yilingiz:</label>
-      <input type="text" id="birthyear" name="birthyear" placeholder="Masalan: 2005" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+      <input type="number" id="birthyear" name="birthyear" placeholder="Masalan: 2005" inputmode="numeric" autocomplete="bday-year" min="1900" step="1" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" required>
+
+      <label id="courseFieldLabel" for="coursePicker">Kurslar:</label>
+      <div class="course-select" id="courseSelect">
+        <button type="button" id="coursePicker" class="course-picker" aria-expanded="false" aria-controls="courseOptions" aria-labelledby="courseFieldLabel courseSelection">
+          <span id="courseSelection">Kurslarni tanlash</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div id="courseOptions" class="course-options" role="group" aria-labelledby="courseFieldLabel" hidden></div>
+      </div>
 
       <button type="submit" id="submitBtn">Telegramdan yozish</button>
       <p id="statusMsg" class="status-message" role="alert"></p>
@@ -104,7 +68,7 @@
   </section>
 
   <section class="location-section" aria-labelledby="locationTitle">
-    <div class="section-heading"><h2 id="locationTitle">Bizni toping</h2></div>
+    <h2 id="locationTitle">Bizni toping</h2>
     <p class="map-location-desc">Bekobod · DKM va 2-maktab yonida</p>
     <div class="map-preview">
       <iframe class="location-map" title="InsightPlus manzili — Yandex Maps" src="https://yandex.uz/map-widget/v1/?ll=69.272315%2C40.214464&amp;pt=69.272315%2C40.214464%2Cpm2blm&amp;z=17&amp;l=map&amp;lang=ru_RU" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -112,15 +76,16 @@
   </section>
   </main>
   <p class="footer-text">
-    Website crafted by <a href="https://t.me/bkzd19" target="_blank" rel="noopener noreferrer" class="creator-link">1bkzd</a>
+    Sayt yaratuvchisi: <a href="https://t.me/bkzd19" target="_blank" rel="noopener noreferrer" class="creator-link">1bkzd</a>
   </p>
 
-  <!-- Suzib yuruvchi tezkor aloqa va ro'yxatdan o'tish paneli (Mobile Floating Dock) -->
   <p class="floating-dock">
-    <a href="tel:+998908124341" class="float-btn float-call"><img src="icons/phone.svg" class="float-icon" alt="">Qo'ng'iroq qilish</a>
-    <a href="#ariza" class="float-btn float-register">Telegramdan yozish</a>
+    <a href="tel:+998908124341" class="float-btn float-call">
+      <span class="call-colors" aria-hidden="true"><span class="call-color call-sky"></span><span class="call-color call-mint"></span><span class="call-color call-peach"></span><span class="call-color call-lavender"></span></span>
+      <img src="icons/phone.svg" class="float-icon" alt=""><span class="call-label">Qo'ng'iroq qilish</span>
+    </a>
   </p>
 
-  <script src="script.js?v=46"></script>
+  <script src="script.js?v=59"></script>
 </body>
 </html>
