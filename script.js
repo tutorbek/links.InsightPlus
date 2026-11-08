@@ -1,77 +1,3 @@
-// Har bir yangi ochilish va reload sayt boshidan boshlanadi.
-history.scrollRestoration = "manual";
-if (window.location.hash) {
-  history.replaceState(history.state, "", window.location.pathname + window.location.search);
-}
-window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-
-// Only desktop wheels use easing. Touch scrolling belongs to the browser.
-function setupSmoothScroll() {
-  if (typeof window.Lenis !== 'function') return;
-  const desktopWheel = window.matchMedia('(min-width: 700px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-  const editable = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])';
-  let controller;
-  let frameId = 0;
-  let lastFrame = 0;
-  let animationTime = 0;
-  let rendering = false;
-
-  function render(time) {
-    frameId = 0;
-    if (!controller) return;
-    animationTime += lastFrame ? Math.min(time - lastFrame, 50) : 1000 / 60;
-    lastFrame = time;
-    rendering = true;
-    controller.raf(animationTime);
-    rendering = false;
-    if (controller.isScrolling === 'smooth') frameId = requestAnimationFrame(render);
-    else lastFrame = 0;
-  }
-
-  function wake() {
-    if (!frameId && !rendering && !document.hidden) frameId = requestAnimationFrame(render);
-  }
-
-  function teardown() {
-    cancelAnimationFrame(frameId);
-    frameId = lastFrame = 0;
-    controller?.destroy();
-    controller = undefined;
-  }
-
-  function sync() {
-    if (!desktopWheel.matches || document.hidden || document.activeElement?.matches(editable)) {
-      teardown();
-      return;
-    }
-    if (controller) return;
-    controller = new Lenis({
-      autoRaf: false,
-      smoothWheel: true,
-      lerp: .065,
-      wheelMultiplier: .65,
-      anchors: true,
-      stopInertiaOnNavigate: true,
-      prevent: node => node.matches(editable),
-      virtualScroll: ({ event, deltaX, deltaY }) =>
-        event.type === 'wheel' && !event.ctrlKey && Math.abs(deltaY) >= Math.abs(deltaX)
-    });
-    controller.on('virtual-scroll', wake);
-    controller.on('scroll', () => {
-      if (controller.isScrolling === 'smooth') wake();
-    });
-  }
-
-  desktopWheel.addEventListener('change', sync);
-  document.addEventListener('visibilitychange', sync);
-  document.addEventListener('focusin', sync);
-  document.addEventListener('focusout', () => queueMicrotask(sync));
-  window.addEventListener('pagehide', teardown);
-  window.addEventListener('pageshow', sync);
-  sync();
-}
-setupSmoothScroll();
-
 // Reserve the card immediately; request the map shortly before it is visible.
 const mapCard = document.getElementById('locationMap');
 const mapStatus = mapCard.querySelector('.map-status');
@@ -118,24 +44,11 @@ function loadLocationMap() {
 
 mapRetry.addEventListener('click', loadLocationMap);
 if ('IntersectionObserver' in window) {
-  let mapIsNear = false;
-  let mapLoadTimer;
-  // Let native touch momentum / smooth scrolling settle before starting
-  // the third-party frame. Listen only until the first map request.
-  const scheduleMapLoad = () => {
-    clearTimeout(mapLoadTimer);
-    if (!mapIsNear) return;
-    mapLoadTimer = setTimeout(() => {
-      window.removeEventListener('scroll', scheduleMapLoad);
-      mapObserver.disconnect();
-      loadLocationMap();
-    }, 180);
-  };
   const mapObserver = new IntersectionObserver(entries => {
-    mapIsNear = entries.some(entry => entry.isIntersecting);
-    scheduleMapLoad();
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    mapObserver.disconnect();
+    loadLocationMap();
   }, { rootMargin: '180px 0px' });
-  window.addEventListener('scroll', scheduleMapLoad, { passive: true });
   mapObserver.observe(mapCard);
 } else {
   loadLocationMap();
@@ -286,65 +199,3 @@ arizaForm.addEventListener("submit", event => {
   ];
   window.location.href = `https://t.me/${ADMIN_USERNAME}?text=${encodeURIComponent(message.join("\n"))}`;
 });
-
-// Separate controllers share motion mechanics, never animation state or timing.
-// Only transforms animate; no per-frame JS or layout reads.
-function animateColorLayers(selector, settings) {
-  const orbs = [...document.querySelectorAll(selector)];
-  // Phones keep the same palette without eight permanent animated layers.
-  const staticColors = window.matchMedia('(max-width: 699px), (pointer: coarse), (prefers-reduced-motion: reduce)');
-  const animations = new Set();
-  const random = (min, max) => min + Math.random() * (max - min);
-  const transform = ({ x, y }) => `translate(${x}%, ${y}%)`;
-  // The button crosses its anchor; the page explores arbitrary directions.
-  // Each layer keeps only one active effect.
-  const opposite = value => (value > 0 ? -1 : value < 0 ? 1 : (Math.random() < .5 ? -1 : 1));
-
-  function drift(orb, from = { x: 0, y: 0 }, initial = false) {
-    let to = {
-      x: opposite(from.x) * random(...settings.x),
-      y: opposite(from.y) * random(...settings.y)
-    };
-    if (settings.wander) {
-      // Reject tiny steps, but allow sideways and same-quadrant travel too.
-      // Limit sampling so even an unlucky random sequence stays inexpensive.
-      for (let attempt = 0; attempt < 12; attempt++) {
-        const candidate = { x: random(-42, 42), y: random(-34, 34) };
-        if (Math.hypot(candidate.x - from.x, candidate.y - from.y) >= 30) {
-          to = candidate;
-          break;
-        }
-      }
-    }
-    const duration = random(...settings.duration);
-    const animation = orb.animate([
-      { transform: transform(from) }, { transform: transform(to) }
-    ], { duration, easing: 'ease-in-out', fill: 'forwards' });
-    // Start within the first pass: the background is already flowing on arrival.
-    if (initial) animation.currentTime = duration * random(.18, .3);
-    animations.add(animation);
-    if (document.hidden) animation.pause();
-    animation.onfinish = () => {
-      animations.delete(animation);
-      orb.style.transform = transform(to);
-      animation.cancel();
-      if (!staticColors.matches) drift(orb, to);
-    };
-  }
-
-  function syncMotion() {
-    if (staticColors.matches) {
-      animations.forEach(animation => animation.cancel());
-      animations.clear();
-      orbs.forEach(orb => { orb.style.transform = ''; });
-      return;
-    }
-    if (!animations.size && typeof Element.prototype.animate === 'function') orbs.forEach(orb => drift(orb, undefined, true));
-    animations.forEach(animation => document.hidden ? animation.pause() : animation.play());
-  }
-  staticColors.addEventListener('change', syncMotion);
-  document.addEventListener('visibilitychange', syncMotion);
-  syncMotion();
-}
-animateColorLayers('.ambient-orb', { x: [22, 38], y: [16, 28], duration: [6500, 10500], wander: true });
-animateColorLayers('.call-color', { x: [25, 45], y: [12, 24], duration: [4500, 7500] });
