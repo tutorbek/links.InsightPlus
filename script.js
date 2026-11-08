@@ -149,16 +149,17 @@ document.addEventListener('keydown', event => {
   }
 });
 document.addEventListener('pointerdown', event => {
-  if (!courseSelect.contains(event.target)) setCoursesOpen(false);
+  if (!courseSelect.contains(event.target) && event.target !== document.getElementById('submitBtn')) setCoursesOpen(false);
 });
 // Labels can briefly blur the field before activating their checkbox.
 // Close only when focus actually arrives outside the whole selector.
 document.addEventListener('focusin', event => {
-  if (!courseSelect.contains(event.target)) setCoursesOpen(false);
+  if (!courseSelect.contains(event.target) && event.target !== document.getElementById('submitBtn')) setCoursesOpen(false);
 });
 
 arizaForm.addEventListener("submit", event => {
   event.preventDefault();
+  setCoursesOpen(false);
   statusMsg.style.display = "none";
   const nameField = arizaForm.elements.fullname;
   const phoneField = arizaForm.elements.phone;
